@@ -1,0 +1,23 @@
+Simple Twitter stream listeners for various topics I like.
+Dumps tweets to a mongo database and then can be exported to csv file for futher analysis.
+
+To use these you must create an account at https://dev.twitter.com.
+You must then create an application and generate your keys and fill in the following
+variables in the scripts.
+
+consumer_key=""
+consumer_secret=""
+
+access_token=""
+access_token_secret=""
+
+Requirements
+============
+Mongo-DB database
+Robomongo GUI for Mongo-DB (optional)
+Tweepy
+Pymongo
+
+
+
+
