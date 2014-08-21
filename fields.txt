@@ -1,5 +1,7 @@
 _id
 name
+screen_name
+location
 text
 time
 geo

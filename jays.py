@@ -20,18 +20,26 @@ class CustomStreamListener(tweepy.StreamListener):
         self.api = api
         super(tweepy.StreamListener, self).__init__()
 
-        self.db = pymongo.MongoClient().bosox
+        self.db = pymongo.MongoClient().jays
 
     def on_status(self, status):
         print status.user.name,
+        print status.user.screen_name,
+        print "--- ",
+        print status.user.location,
         print "--- ",
         print status.text,
-        print time.strftime("%H:%M:%S")
+        print time.strftime("%H:%M:%S"),
+        print status.coordinates,
+        print status.source
+        print ""
         data ={}
         data['name'] = status.user.name
+        data['screen_name'] = status.user.screen_name
+        data['location'] = status.user.location
         data['text'] = status.text
         data['time'] = time.strftime("%H:%M")
-        data['geo'] = status.geo
+        data['geo'] = status.coordinates
         data['source'] = status.source
 
         self.db.Tweets.insert(data)
@@ -44,6 +52,8 @@ class CustomStreamListener(tweepy.StreamListener):
         print >> sys.stderr, 'Timeout...'
         return True # Don't kill the stream
 
-sapi = tweepy.streaming.Stream(auth, CustomStreamListener(api))
-#setTerms = ['bluejays', 'yankees']
-sapi.filter(track=['bluejays'])
+try:
+    sapi = tweepy.streaming.Stream(auth, CustomStreamListener(api))
+    sapi.filter(track=['bluejays'])
+except KeyboardInterrupt:
+    print "Stream Killed"
