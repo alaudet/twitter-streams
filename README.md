@@ -23,6 +23,9 @@ Requirements
 
 - Pymongo
 
+Search
+======
 
+search.py searches all tweets over the past week on a given filter
 
 
