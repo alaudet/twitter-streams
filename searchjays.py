@@ -4,6 +4,8 @@
 
 import tweepy
 import pymongo
+import datetime
+from datetime import timedelta
 
 consumer_key=""
 consumer_secret=""
@@ -14,17 +16,23 @@ access_token_secret=""
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
-db = pymongo.MongoClient().timmins
+db = pymongo.MongoClient().jays
 
 for status in tweepy.Cursor(api.search,
-                           q="Timmins",
+                           q="#BlueJays",
                            count=100,
                            result_type='recent',
                            include_entities=True,
                            monitor_rate_limit=True, 
                            wait_on_rate_limit=True,
                            lang="en").items():
-    print status.created_at,
+    print status.created_at 
+    #utc_time = dateutil.parser.parse(status.created_at)
+    #print utc_time
+    eastern_time = status.created_at - timedelta(hours=5)
+    edt_time = eastern_time.strftime('%Y-%m-%d %H:%M')
+
+    print edt_time,
     print "--- ",
     print status.user.name,
     print status.user.screen_name,
@@ -40,7 +48,7 @@ for status in tweepy.Cursor(api.search,
     data['screen_name'] = status.user.screen_name
     data['location'] = status.user.location
     data['text'] = status.text
-    data['created_at'] = status.created_at
+    data['created_at'] = edt_time
     data['geo'] = status.coordinates
     data['source'] = status.source
 

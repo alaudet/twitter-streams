@@ -3,7 +3,8 @@
 import tweepy
 import sys
 import pymongo
-import time
+import datetime
+from datetime import timedelta
 
 consumer_key=""
 consumer_secret=""
@@ -22,14 +23,20 @@ class CustomStreamListener(tweepy.StreamListener):
 
         self.db = pymongo.MongoClient().jays
 
+
+
     def on_status(self, status):
+        eastern_time = status.created_at - timedelta(hours=4)
+        edt_time = eastern_time.strftime('%Y-%m-%d %H:%M:%S')
+        db_time = eastern_time.strftime('%H:%M')
+        print edt_time,
+        print "--- ",
         print status.user.name,
         print status.user.screen_name,
         print "--- ",
         print status.user.location,
         print "--- ",
         print status.text,
-        print time.strftime("%H:%M:%S"),
         print status.coordinates,
         print status.source
         print ""
@@ -38,7 +45,7 @@ class CustomStreamListener(tweepy.StreamListener):
         data['screen_name'] = status.user.screen_name
         data['location'] = status.user.location
         data['text'] = status.text
-        data['time'] = time.strftime("%H:%M")
+        data['time'] = db_time
         data['geo'] = status.coordinates
         data['source'] = status.source
 
@@ -54,6 +61,6 @@ class CustomStreamListener(tweepy.StreamListener):
 
 try:
     sapi = tweepy.streaming.Stream(auth, CustomStreamListener(api))
-    sapi.filter(track=['bluejays'])
+    sapi.filter(track=['BlueJays'])
 except KeyboardInterrupt:
     print "Stream Killed"

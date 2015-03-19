@@ -1,8 +1,8 @@
 _id
 name
-screen_name
-location
 text
-time
-geo
+created_at
 source
+location
+geo
+screen_name
