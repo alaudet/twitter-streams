@@ -1,0 +1,11 @@
+# Fill in your values for your app generated at
+# https://apps.twitter.com
+# put this configuration file in your /home/<account> folder.
+
+[oauth]
+
+consumer_key=
+consumer_secret=
+
+access_token=
+access_token_secret=

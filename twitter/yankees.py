@@ -3,17 +3,20 @@
 import tweepy
 import sys
 import pymongo
-import datetime
 from datetime import timedelta
+import ConfigParser
 
-consumer_key=""
-consumer_secret=""
+config = ConfigParser.RawConfigParser()
+config.read('/home/al/.tweepy')
 
-access_token=""
-access_token_secret=""
+configs = {'consumer_key': config.get('oauth', 'consumer_key'),
+           'consumer_secret': config.get('oauth', 'consumer_secret'),
+           'access_token': config.get('oauth', 'access_token'),
+           'access_token_secret': config.get('oauth', 'access_token_secret')
+           }
 
-auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-auth.set_access_token(access_token, access_token_secret)
+auth = tweepy.OAuthHandler(configs['consumer_key'], configs['consumer_secret'])
+auth.set_access_token(configs['access_token'], configs['access_token_secret'])
 api = tweepy.API(auth)
 
 class CustomStreamListener(tweepy.StreamListener):
@@ -21,7 +24,7 @@ class CustomStreamListener(tweepy.StreamListener):
         self.api = api
         super(tweepy.StreamListener, self).__init__()
 
-        self.db = pymongo.MongoClient().habs
+        self.db = pymongo.MongoClient().yankees_opener
 
 
 
@@ -61,6 +64,6 @@ class CustomStreamListener(tweepy.StreamListener):
 
 try:
     sapi = tweepy.streaming.Stream(auth, CustomStreamListener(api))
-    sapi.filter(track=['#GoHabsGo'])
+    sapi.filter(track=['Yankees'])
 except KeyboardInterrupt:
     print "Stream Killed"

@@ -4,19 +4,23 @@
 
 import tweepy
 import pymongo
-import datetime
 from datetime import timedelta
+import ConfigParser
 
-consumer_key=""
-consumer_secret=""
+config = ConfigParser.RawConfigParser()
+config.read('/home/al/.tweepy')
 
-access_token=""
-access_token_secret=""
+configs = {'consumer_key': config.get('oauth', 'consumer_key'),
+           'consumer_secret': config.get('oauth', 'consumer_secret'),
+           'access_token': config.get('oauth', 'access_token'),
+           'access_token_secret': config.get('oauth', 'access_token_secret')
+           }
 
-auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-auth.set_access_token(access_token, access_token_secret)
+auth = tweepy.OAuthHandler(configs['consumer_key'], configs['consumer_secret'])
+auth.set_access_token(configs['access_token'], configs['access_token_secret'])
 api = tweepy.API(auth)
-db = pymongo.MongoClient().jays
+
+db = pymongo.MongoClient().jays1week_from_2015_03_18
 
 for status in tweepy.Cursor(api.search,
                            q="#BlueJays",
@@ -27,9 +31,9 @@ for status in tweepy.Cursor(api.search,
                            wait_on_rate_limit=True,
                            lang="en").items():
     print status.created_at 
-    #utc_time = dateutil.parser.parse(status.created_at)
-    #print utc_time
-    eastern_time = status.created_at - timedelta(hours=5)
+    # utc_time = dateutil.parser.parse(status.created_at)
+    # print utc_time
+    eastern_time = status.created_at - timedelta(hours=4)
     edt_time = eastern_time.strftime('%Y-%m-%d %H:%M')
 
     print edt_time,
@@ -43,7 +47,7 @@ for status in tweepy.Cursor(api.search,
     print status.coordinates,
     print status.source
     print ""
-    data ={}
+    data = {}
     data['name'] = status.user.name
     data['screen_name'] = status.user.screen_name
     data['location'] = status.user.location
@@ -53,4 +57,3 @@ for status in tweepy.Cursor(api.search,
     data['source'] = status.source
 
     db.Tweets.insert(data)
-

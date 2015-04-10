@@ -4,23 +4,26 @@
 
 import tweepy
 import pymongo
-import datetime
 from datetime import timedelta
-# from datetime import datetime
+import ConfigParser
 
-consumer_key=""
-consumer_secret=""
+config = ConfigParser.RawConfigParser()
+config.read('/home/al/.tweepy')
 
-access_token=""
-access_token_secret=""
+configs = {'consumer_key': config.get('oauth', 'consumer_key'),
+           'consumer_secret': config.get('oauth', 'consumer_secret'),
+           'access_token': config.get('oauth', 'access_token'),
+           'access_token_secret': config.get('oauth', 'access_token_secret')
+           }
 
-auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-auth.set_access_token(access_token, access_token_secret)
+auth = tweepy.OAuthHandler(configs['consumer_key'], configs['consumer_secret'])
+auth.set_access_token(configs['access_token'], configs['access_token_secret'])
 api = tweepy.API(auth)
-db = pymongo.MongoClient().habs
+
+db = pymongo.MongoClient().linux
 
 for status in tweepy.Cursor(api.search,
-                           q="#GoHabsGo",
+                           q="#Linux",
                            count=100,
                            result_type='recent',
                            include_entities=True,

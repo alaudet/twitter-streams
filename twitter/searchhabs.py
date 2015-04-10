@@ -4,23 +4,28 @@
 
 import tweepy
 import pymongo
-import datetime
 from datetime import timedelta
+import ConfigParser
 
-consumer_key=""
-consumer_secret=""
+config = ConfigParser.RawConfigParser()
+config.read('/home/al/.tweepy')
 
-access_token=""
-access_token_secret=""
+configs = {'consumer_key': config.get('oauth', 'consumer_key'),
+           'consumer_secret': config.get('oauth', 'consumer_secret'),
+           'access_token': config.get('oauth', 'access_token'),
+           'access_token_secret': config.get('oauth', 'access_token_secret')
+           }
 
-auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-auth.set_access_token(access_token, access_token_secret)
+auth = tweepy.OAuthHandler(configs['consumer_key'], configs['consumer_secret'])
+auth.set_access_token(configs['access_token'], configs['access_token_secret'])
 api = tweepy.API(auth)
-db = pymongo.MongoClient().raspi
+db = pymongo.MongoClient().habs_march27
 
 for status in tweepy.Cursor(api.search,
-                           q="#RaspberryPi",
-                           count=100,
+                           q="#GoHabsGo",
+                           since="2015-03-25",
+                           until="2015-03-27",
+			   count=100,
                            result_type='recent',
                            include_entities=True,
                            monitor_rate_limit=True, 
@@ -28,9 +33,9 @@ for status in tweepy.Cursor(api.search,
                            lang="en").items():
 
 
-    eastern_time = status.created_at - timedelta(hours=5)
+    eastern_time = status.created_at - timedelta(hours=4)
     edt_time = eastern_time.strftime('%Y-%m-%d %H:%M')
-
+    
     print edt_time,
     print "--- ",
     print status.user.name,

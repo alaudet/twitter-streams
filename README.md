@@ -1,10 +1,11 @@
 Simple Twitter stream listeners for various topics I like.
-Dumps tweets to a mongo database and then can be exported to csv file for futher analysis.
-Converts date to Eastern time.
+Dumps tweets to console and a mongo database for future analysis.
 
-To use these you must create an account at https://dev.twitter.com.
+See mongo_db_commands for dumping database to csv if you prefer.
+
+To use these you must create an account at https://apps.twitter.com.
 You must then create an application and generate your keys and fill in the following
-variables in the scripts.
+variables in the scripts.  Your app can be create Read-Only for this.
 
 - consumer_key=""
 
@@ -13,6 +14,11 @@ variables in the scripts.
 - access_token=""
 
 - access_token_secret=""
+
+
+These scripts use ConfigParser to read the keys instead of putting them directly into the scripts.
+Put .tweepy in your home folder and then change the script to point to it. This is a better approach than 
+loading keys into scripts so that you don't mess up and upload your keys to Github.
 
 Requirements
 ============
@@ -24,13 +30,13 @@ Requirements
 
 - Pymongo
 
-Analyse.ipynb - Analyse data scraped from twitter.
-Requires matplotlib, numpy, pandas, nltk, folium
+Example notebooks to analyse data scraped from twitter.
+Requires matplotlib, pandas, nltk, folium
 
 Search
 ======
 
-search.py searches all tweets over the past week on a given filter
+search*.py searches all tweets over the past week on a given filter
 
 
 
